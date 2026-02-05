@@ -178,45 +178,52 @@ public class ImageButton : UserControl
 
     protected override void OnPaint(PaintEventArgs e)
     {
-        base.OnPaint(e);
-
+        // Do NOT call base.OnPaint(e) as it triggers the faulty WinForms transparency
         Graphics g = e.Graphics;
+
+        // --- MANUAL BACKGROUND RENDERING ---
+        // This looks through siblings (like your form image) to draw them behind the button
+        if (Parent != null)
+        {
+            int index = Parent.Controls.GetChildIndex(this);
+            for (int i = Parent.Controls.Count - 1; i > index; i--)
+            {
+                Control sibling = Parent.Controls[i];
+                if (sibling.Bounds.IntersectsWith(this.Bounds) && sibling.Visible)
+                {
+                    using Bitmap bmp = new(sibling.Width, sibling.Height);
+                    sibling.DrawToBitmap(bmp, new Rectangle(0, 0, sibling.Width, sibling.Height));
+                    g.DrawImage(bmp, sibling.Left - this.Left, sibling.Top - this.Top);
+                }
+            }
+        }
+
+        // --- BUTTON RENDERING ---
         g.SmoothingMode = SmoothingMode.AntiAlias;
         g.InterpolationMode = InterpolationMode.HighQualityBicubic;
         g.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-        // Determine which image to draw
         Image? imageToDraw = normalImage;
-
         if (isPressed && pressedImage != null)
             imageToDraw = pressedImage;
         else if (isHovering && hoverImage != null)
             imageToDraw = hoverImage;
 
-        // Draw the image at its actual size (no stretching!)
         if (imageToDraw != null)
         {
             g.DrawImage(imageToDraw, 0, 0, imageToDraw.Width, imageToDraw.Height);
         }
 
-        // Draw text if enabled
         if (showText && !string.IsNullOrEmpty(buttonText))
         {
-            using (SolidBrush textBrush = new(textColor))
+            using SolidBrush textBrush = new(textColor);
+            StringFormat sf = new()
             {
-                StringFormat sf = new();
-                sf.Alignment = StringAlignment.Center;
-                sf.LineAlignment = StringAlignment.Center;
-
-                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                g.DrawString(
-                    buttonText,
-                    textFont,
-                    textBrush,
-                    new RectangleF(0, 0, Width, Height),
-                    sf
-                );
-            }
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center,
+            };
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            g.DrawString(buttonText, textFont, textBrush, new RectangleF(0, 0, Width, Height), sf);
         }
     }
 
