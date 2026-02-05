@@ -9,7 +9,6 @@ public partial class Window : Form
     private ImageButton? getStartedButton;
     private ImageButton? prevButton;
     private ImageButton? nextButton;
-    private ImageButton? tempButton;
     private Panel form;
     private PictureBox formImg;
     private Size maximizedSize;
@@ -38,7 +37,7 @@ public partial class Window : Form
 
         formImg = new()
         {
-            Image = Image.FromFile("assets\\form.png"),
+            Image = Image.FromFile("assets\\group1.png"),
             Location = new(1920, 0),
             SizeMode = PictureBoxSizeMode.AutoSize,
         };
@@ -88,6 +87,10 @@ public partial class Window : Form
         prevButton.Click += (sender, e) =>
         {
             Point currentPos = formImg.Location;
+
+            if (formImg.Left == 0)
+                return;
+
             AnimateControl(formImg, new Point(currentPos.X + 1920, currentPos.Y), 500);
         };
 
@@ -101,6 +104,9 @@ public partial class Window : Form
         nextButton.Click += (sender, e) =>
         {
             Point currentPos = formImg.Location;
+            if (formImg.Right == 1920)
+                return;
+
             AnimateControl(formImg, new Point(currentPos.X - 1920, currentPos.Y), 500);
         };
 
@@ -119,29 +125,15 @@ public partial class Window : Form
 
             AnimateControl(getStartedButton, new Point(getStartedButton.Location.X, 991), 500);
 
+            Point currentPos = formImg.Location;
+            AnimateControl(formImg, new Point(currentPos.X - 1920, currentPos.Y), 500);
+
             AnimateControl(prevButton, new Point(364, 877), 500);
-            AnimateControl(tempButton, new Point(364, 100), 500);
             AnimateControl(nextButton, new Point(1358, 877), 500);
 
             prevButton.BringToFront();
             nextButton.BringToFront();
         };
-
-        Image tempButtonImage = Image.FromFile("assets\\buttonprevious.png");
-        tempButton = new()
-        {
-            NormalImage = tempButtonImage,
-            Size = new(tempButtonImage.Width, tempButtonImage.Height),
-            Location = new Point(-tempButtonImage.Width, 100), // animates to (364, 877)
-        };
-        tempButton.Click += (sender, e) =>
-        {
-            Point currentPos = form.Location;
-            AnimateControl(form, new Point(currentPos.X + 1920, currentPos.Y), 500);
-        };
-
-        form.Controls.Add(tempButton);
-        form.Controls.SetChildIndex(tempButton, 0);
 
         content.Controls.Add(prevButton);
         content.Controls.Add(nextButton);
