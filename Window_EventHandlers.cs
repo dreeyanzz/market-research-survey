@@ -47,8 +47,6 @@ public partial class Window : Form
 
         timer.Tick += (s, e) =>
         {
-            prevButton!.BackColor = Color.Transparent;
-            nextButton!.BackColor = Color.Transparent;
             double elapsed = (DateTime.Now - startTime).TotalMilliseconds;
             double t = Math.Min(1.0, elapsed / durationMs);
 
