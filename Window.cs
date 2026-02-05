@@ -9,9 +9,10 @@ public partial class Window : Form
     private ImageButton? getStartedButton;
     private ImageButton? prevButton;
     private ImageButton? nextButton;
-    private Panel form;
-    private PictureBox formImg;
+    private readonly Panel form;
+    private readonly PictureBox formImg;
     private Size maximizedSize;
+    private int index = -1;
 
     public Window()
     {
@@ -82,7 +83,7 @@ public partial class Window : Form
         {
             NormalImage = prevButtonImage,
             Size = new(prevButtonImage.Width, prevButtonImage.Height),
-            Location = new Point(-prevButtonImage.Width, 877), // animates to (364, 877)
+            Location = new Point(-prevButtonImage.Width, 877),
         };
         prevButton.Click += (sender, e) =>
         {
@@ -91,6 +92,11 @@ public partial class Window : Form
             if (formImg.Left == 0)
                 return;
 
+            int stopPosX = index * 1920;
+            if (formImg.Left != -stopPosX)
+                return;
+
+            index--;
             AnimateControl(formImg, new Point(currentPos.X + 1920, currentPos.Y), 500);
         };
 
@@ -99,7 +105,7 @@ public partial class Window : Form
         {
             NormalImage = nextButtonImage,
             Size = new(nextButtonImage.Width, nextButtonImage.Height),
-            Location = new Point(1920, 877), // animates to (1358, 877)
+            Location = new Point(1920, 877),
         };
         nextButton.Click += (sender, e) =>
         {
@@ -107,6 +113,11 @@ public partial class Window : Form
             if (formImg.Right == 1920)
                 return;
 
+            int stopPosX = index * 1920;
+            if (formImg.Left != -stopPosX)
+                return;
+
+            index++;
             AnimateControl(formImg, new Point(currentPos.X - 1920, currentPos.Y), 500);
         };
 
@@ -120,6 +131,8 @@ public partial class Window : Form
 
         getStartedButton.Click += (sender, e) =>
         {
+            index++;
+
             AnimateControl(header!, new Point(0, 10), 500);
             AnimateControl(titleBarImg, new Point(0, 0), 500);
 
