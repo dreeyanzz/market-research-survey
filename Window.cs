@@ -9,8 +9,8 @@ public partial class Window : Form
     private ImageButton? getStartedButton;
     private ImageButton? prevButton;
     private ImageButton? nextButton;
-    private readonly Panel form;
-    private readonly PictureBox formImg;
+    private Panel? form;
+    private PictureBox? formImg;
     private Size maximizedSize;
     private int index = -1;
 
@@ -32,20 +32,7 @@ public partial class Window : Form
             SizeMode = PictureBoxSizeMode.AutoSize,
         };
 
-        Image _formImg = Image.FromFile("assets\\form.png");
-
-        form = new() { Location = new Point(0, 185), Size = _formImg.Size };
-
-        formImg = new()
-        {
-            Image = Image.FromFile("assets\\group1.png"),
-            Location = new(1920, 0),
-            SizeMode = PictureBoxSizeMode.AutoSize,
-        };
-
-        form.Controls.Add(formImg);
-        form.Controls.SetChildIndex(formImg, 1);
-
+        InitForm();
         InitNavigationButtons();
 
         content.Controls.Add(header);
@@ -54,7 +41,7 @@ public partial class Window : Form
 
         content.Controls.SetChildIndex(header!, 1);
         content.Controls.SetChildIndex(titleBarImg, 2);
-        content.Controls.SetChildIndex(form, 3);
+        content.Controls.SetChildIndex(form!, 3);
 
         overlay = new()
         {
@@ -74,86 +61,8 @@ public partial class Window : Form
 
         Load += Window_Load;
         SizeChanged += Window_OnResize;
-    }
 
-    private void InitNavigationButtons()
-    {
-        Image prevButtonImage = Image.FromFile("assets\\buttonprevious.png");
-        prevButton = new()
-        {
-            NormalImage = prevButtonImage,
-            Size = new(prevButtonImage.Width, prevButtonImage.Height),
-            Location = new Point(-prevButtonImage.Width, 877),
-        };
-        prevButton.Click += (sender, e) =>
-        {
-            Point currentPos = formImg.Location;
-
-            if (formImg.Left == 0)
-                return;
-
-            int stopPosX = index * 1920;
-            if (formImg.Left != -stopPosX)
-                return;
-
-            index--;
-            AnimateControl(formImg, new Point(currentPos.X + 1920, currentPos.Y), 500);
-        };
-
-        Image nextButtonImage = Image.FromFile("assets\\buttonnext.png");
-        nextButton = new()
-        {
-            NormalImage = nextButtonImage,
-            Size = new(nextButtonImage.Width, nextButtonImage.Height),
-            Location = new Point(1920, 877),
-        };
-        nextButton.Click += (sender, e) =>
-        {
-            Point currentPos = formImg.Location;
-            if (formImg.Right == 1920)
-                return;
-
-            int stopPosX = index * 1920;
-            if (formImg.Left != -stopPosX)
-                return;
-
-            index++;
-            AnimateControl(formImg, new Point(currentPos.X - 1920, currentPos.Y), 500);
-        };
-
-        Image getStartedImage = Image.FromFile("assets\\getStartedButton.png");
-        getStartedButton = new()
-        {
-            NormalImage = getStartedImage,
-            Size = new(getStartedImage.Width, getStartedImage.Height),
-            Location = new Point(861, 877),
-        };
-
-        getStartedButton.Click += (sender, e) =>
-        {
-            index++;
-
-            AnimateControl(header!, new Point(0, 10), 500);
-            AnimateControl(titleBarImg, new Point(0, 0), 500);
-
-            AnimateControl(getStartedButton, new Point(getStartedButton.Location.X, 991), 500);
-
-            Point currentPos = formImg.Location;
-            AnimateControl(formImg, new Point(currentPos.X - 1920, currentPos.Y), 500);
-
-            AnimateControl(prevButton, new Point(364, 877), 500);
-            AnimateControl(nextButton, new Point(1358, 877), 500);
-
-            prevButton.BringToFront();
-            nextButton.BringToFront();
-        };
-
-        content.Controls.Add(prevButton);
-        content.Controls.Add(nextButton);
-        content.Controls.Add(getStartedButton);
-
-        content.Controls.SetChildIndex(prevButton, 0);
-        content.Controls.SetChildIndex(nextButton, 0);
-        content.Controls.SetChildIndex(getStartedButton, 0);
+        radioPage0 = new CustomRadioGroup();
+        InitPage0();
     }
 }
