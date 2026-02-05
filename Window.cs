@@ -23,18 +23,36 @@ public partial class Window : Form
 
         InitHeader();
 
+        Image _titleBarImage = Image.FromFile("assets\\TitleBar.png");
         titleBarImg = new()
         {
-            Image = Image.FromFile("assets\\TitleBar.png"),
+            Image = _titleBarImage,
+            Location = new(0, -_titleBarImage.Height),
+            SizeMode = PictureBoxSizeMode.AutoSize,
+        };
+
+        Image _formImg = Image.FromFile("assets\\form.png");
+
+        form = new() { Location = new Point(1920, 185), Size = _formImg.Size };
+
+        formImg = new()
+        {
+            Image = Image.FromFile("assets\\form.png"),
             Location = new(0, 0),
             SizeMode = PictureBoxSizeMode.AutoSize,
         };
 
+        form.Controls.Add(formImg);
+
         InitNavigationButtons();
 
         content.Controls.Add(header);
+        content.Controls.Add(titleBarImg);
+        content.Controls.Add(form);
 
-        content.Controls.SetChildIndex(header!, 0);
+        content.Controls.SetChildIndex(header!, 1);
+        content.Controls.SetChildIndex(titleBarImg, 2);
+        content.Controls.SetChildIndex(form, 3);
 
         overlay = new()
         {
@@ -54,20 +72,6 @@ public partial class Window : Form
 
         Load += Window_Load;
         SizeChanged += Window_OnResize;
-
-        Image _formImg = Image.FromFile("assets\\form.png");
-
-        form = new() { Location = new Point(1920, 185), Size = _formImg.Size };
-
-        formImg = new()
-        {
-            Image = Image.FromFile("assets\\form.png"),
-            Location = new(0, 0),
-            SizeMode = PictureBoxSizeMode.AutoSize,
-        };
-
-        form.Controls.Add(formImg);
-        content.Controls.Add(form);
     }
 
     private void InitNavigationButtons()
@@ -108,14 +112,19 @@ public partial class Window : Form
 
         getStartedButton.Click += (sender, e) =>
         {
-            content.Controls.Add(titleBarImg);
             AnimateControl(header!, new Point(0, 10), 500);
+            AnimateControl(titleBarImg, new Point(0, 0), 500);
+
             AnimateControl(getStartedButton, new Point(getStartedButton.Location.X, 991), 500);
-            AnimateControl(prevButton, new Point(364, 877), 500);
-            AnimateControl(nextButton, new Point(1358, 877), 500);
 
             Point currentPos = form.Location;
             AnimateControl(form, new Point(currentPos.X - 1920, currentPos.Y), 500);
+
+            AnimateControl(prevButton, new Point(364, 877), 500);
+            AnimateControl(nextButton, new Point(1358, 877), 500);
+
+            prevButton.BringToFront();
+            nextButton.BringToFront();
         };
 
         content.Controls.Add(prevButton);
