@@ -9,7 +9,7 @@ namespace market_research_survey;
 
 public class RadioOption
 {
-    public string Label { get; set; }
+    public string Label { get; set; } = "";
     public Point Position { get; set; }
     public object? Value { get; set; }
 
@@ -32,15 +32,63 @@ public class CustomRadioGroup : Control
     private int _imageTextSpacing = 8;
     private Color _hoverColor = Color.FromArgb(40, Color.Gray);
 
+    // Footer Label Fields
+    private string _minLabel = "";
+    private string _maxLabel = "";
+    private Color _footerColor = Color.Gray;
+
     public CustomRadioGroup()
     {
         this.DoubleBuffered = true;
         this.ResizeRedraw = true;
         this.ForeColor = Color.Black;
         _customFont = new Font("Segoe UI", 10F);
+        this.Size = new Size(400, 120); // Default height expanded for footer
     }
 
     #region Properties
+
+    [
+        Category("Appearance"),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
+    ]
+    public string MinLabel
+    {
+        get => _minLabel;
+        set
+        {
+            _minLabel = value;
+            Invalidate();
+        }
+    }
+
+    [
+        Category("Appearance"),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
+    ]
+    public string MaxLabel
+    {
+        get => _maxLabel;
+        set
+        {
+            _maxLabel = value;
+            Invalidate();
+        }
+    }
+
+    [
+        Category("Appearance"),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
+    ]
+    public Color FooterColor
+    {
+        get => _footerColor;
+        set
+        {
+            _footerColor = value;
+            Invalidate();
+        }
+    }
 
     [
         Category("Appearance"),
@@ -98,20 +146,6 @@ public class CustomRadioGroup : Control
         }
     }
 
-    [
-        Category("Appearance"),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
-    ]
-    public Color HoverColor
-    {
-        get => _hoverColor;
-        set
-        {
-            _hoverColor = value;
-            Invalidate();
-        }
-    }
-
     [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public List<RadioOption> Options
     {
@@ -136,16 +170,6 @@ public class CustomRadioGroup : Control
                 Invalidate();
             }
         }
-    }
-
-    [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public string? SelectedLabel
-    {
-        get =>
-            (_selectedIndex >= 0 && _selectedIndex < _options.Count)
-                ? _options[_selectedIndex].Label
-                : null;
-        set { SelectedIndex = _options.FindIndex(o => o.Label == value); }
     }
 
     [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -191,9 +215,42 @@ public class CustomRadioGroup : Control
         g.SmoothingMode = SmoothingMode.AntiAlias;
         g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 
+        // 1. Draw individual options
         for (int i = 0; i < _options.Count; i++)
         {
             DrawRadioOption(g, _options[i], i == _selectedIndex, i == _hoveredIndex, i);
+        }
+
+        // 2. Draw footer labels (Least / Greatest)
+        if (_options.Count >= 2)
+        {
+            using var footerBrush = new SolidBrush(_footerColor);
+            using var footerFont = new Font(
+                _customFont.FontFamily,
+                _customFont.Size * 0.85f,
+                FontStyle.Regular
+            );
+
+            // Left Label
+            if (!string.IsNullOrEmpty(_minLabel))
+            {
+                SizeF size = g.MeasureString(_minLabel, footerFont);
+                float x = _options[0].Position.X;
+                g.DrawString(_minLabel, footerFont, footerBrush, x, this.Height - size.Height - 5);
+            }
+
+            // Right Label
+            if (!string.IsNullOrEmpty(_maxLabel))
+            {
+                SizeF size = g.MeasureString(_maxLabel, footerFont);
+                // Align to the right edge of the last option's label
+                Rectangle lastBounds = GetOptionBounds(
+                    _options[_options.Count - 1],
+                    _options.Count - 1
+                );
+                float x = (lastBounds.X + lastBounds.Width) - size.Width;
+                g.DrawString(_maxLabel, footerFont, footerBrush, x, this.Height - size.Height - 5);
+            }
         }
     }
 
@@ -208,18 +265,13 @@ public class CustomRadioGroup : Control
         Image? img = isSelected ? _activeImage : _inactiveImage;
         int indicatorW = img?.Width ?? 16;
         int indicatorH = img?.Height ?? 16;
-
         SizeF textSize = g.MeasureString(option.Label, _customFont);
 
-        // Calculate total row height to find the center
         float rowHeight = Math.Max(indicatorH, textSize.Height);
-
-        // Center both the indicator and the text within that row height
         float indicatorY = option.Position.Y + (rowHeight - indicatorH) / 2f;
         float textY = option.Position.Y + (rowHeight - textSize.Height) / 2f;
         float currentX = option.Position.X;
 
-        // 1. Draw Indicator
         if (img != null)
         {
             g.DrawImage(img, currentX, indicatorY, indicatorW, indicatorH);
@@ -227,18 +279,17 @@ public class CustomRadioGroup : Control
         else
         {
             RectangleF rect = new RectangleF(currentX, indicatorY, indicatorW, indicatorH);
-            using (Pen p = new Pen(this.ForeColor, 2))
-                g.DrawEllipse(p, rect);
+            using Pen p = new Pen(this.ForeColor, 2);
+            g.DrawEllipse(p, rect);
             if (isSelected)
             {
                 RectangleF inner = rect;
                 inner.Inflate(-4, -4);
-                using (Brush b = new SolidBrush(this.ForeColor))
-                    g.FillEllipse(b, inner);
+                using Brush b = new SolidBrush(this.ForeColor);
+                g.FillEllipse(b, inner);
             }
         }
 
-        // 2. Draw Label
         using (Brush brush = new SolidBrush(this.ForeColor))
         {
             g.DrawString(
@@ -250,14 +301,11 @@ public class CustomRadioGroup : Control
             );
         }
 
-        // 3. Draw Hover State
         if (isHovered)
         {
             Rectangle bounds = GetOptionBounds(option, index);
-            using (SolidBrush hb = new SolidBrush(_hoverColor))
-            {
-                g.FillRectangle(hb, bounds);
-            }
+            using SolidBrush hb = new SolidBrush(_hoverColor);
+            g.FillRectangle(hb, bounds);
         }
     }
 
@@ -267,14 +315,11 @@ public class CustomRadioGroup : Control
             (index == _selectedIndex ? _activeImage?.Width : _inactiveImage?.Width) ?? 16;
         int indicatorH =
             (index == _selectedIndex ? _activeImage?.Height : _inactiveImage?.Height) ?? 16;
-
-        using (Graphics g = this.CreateGraphics())
-        {
-            SizeF textSize = g.MeasureString(option.Label, _customFont);
-            int width = indicatorW + _imageTextSpacing + (int)textSize.Width + 4;
-            int height = (int)Math.Max(indicatorH, textSize.Height) + 4;
-            return new Rectangle(option.Position.X - 2, option.Position.Y - 2, width, height);
-        }
+        using Graphics g = this.CreateGraphics();
+        SizeF textSize = g.MeasureString(option.Label, _customFont);
+        int width = indicatorW + _imageTextSpacing + (int)textSize.Width + 4;
+        int height = (int)Math.Max(indicatorH, textSize.Height) + 4;
+        return new Rectangle(option.Position.X - 2, option.Position.Y - 2, width, height);
     }
 
     #endregion
@@ -305,7 +350,6 @@ public class CustomRadioGroup : Control
                 break;
             }
         }
-
         if (hit != _hoveredIndex)
         {
             _hoveredIndex = hit;
@@ -316,16 +360,8 @@ public class CustomRadioGroup : Control
 
     protected override void OnMouseLeave(EventArgs e)
     {
-        base.OnMouseLeave(e);
         _hoveredIndex = -1;
         Invalidate();
     }
     #endregion
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-            _customFont?.Dispose();
-        base.Dispose(disposing);
-    }
 }

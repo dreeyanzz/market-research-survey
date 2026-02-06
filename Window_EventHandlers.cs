@@ -137,66 +137,89 @@ public partial class Window : Form
         };
         nextButton.Click += (sender, e) =>
         {
-            if (index == 0)
-            {
-                if (!hasSelectedGender)
-                    return;
-            }
-            else if (index == 1)
-            {
-                if (!hasSelectedAgeRange)
-                    return;
-            }
-            else if (index == 2)
-            {
-                if (!hasSelectedMaritalStatus)
-                    return;
-            }
-            else if (index == 3)
-            {
-                if (!hasSelectedAnnualIncomeRange)
-                    return;
-            }
-            else if (index == 4)
-            {
-                if (!hasSelectedEmploymentStatus)
-                    return;
-            }
-            else if (index == 5)
-            {
-                if (!hasSelectedEducation)
-                    return;
-            }
-            else if (index == 6)
-            {
-                if (!hasSelectedExercise)
-                    return;
-            }
-            else if (index == 7)
-            {
-                if (!hasSelectedSportswear)
-                    return;
-            }
-            else if (index == 8)
-            {
-                if (!hasSelectedLastBuySportswear)
-                    return;
-            }
-            else if (index == 9)
-            {
-                if (!hasSelectedSportswearPurpose)
-                    return;
-            }
-            else if (index == 10)
-            {
-                if (!hasSelectedBuySportswear)
-                    return;
-            }
-            else if (index == 11)
-            {
-                if (!hasSelectedSportswearDesign)
-                    return;
-            }
+            // if (index == 0)
+            // {
+            //     if (!hasSelectedGender)
+            //         return;
+            // }
+            // else if (index == 1)
+            // {
+            //     if (!hasSelectedAgeRange)
+            //         return;
+            // }
+            // else if (index == 2)
+            // {
+            //     if (!hasSelectedMaritalStatus)
+            //         return;
+            // }
+            // else if (index == 3)
+            // {
+            //     if (!hasSelectedAnnualIncomeRange)
+            //         return;
+            // }
+            // else if (index == 4)
+            // {
+            //     if (!hasSelectedEmploymentStatus)
+            //         return;
+            // }
+            // else if (index == 5)
+            // {
+            //     if (!hasSelectedEducation)
+            //         return;
+            // }
+            // else if (index == 6)
+            // {
+            //     if (!hasSelectedExercise)
+            //         return;
+            // }
+            // else if (index == 7)
+            // {
+            //     if (!hasSelectedSportswear)
+            //         return;
+            // }
+            // else if (index == 8)
+            // {
+            //     if (!hasSelectedLastBuySportswear)
+            //         return;
+            // }
+            // else if (index == 9)
+            // {
+            //     if (!hasSelectedSportswearPurpose)
+            //         return;
+            // }
+            // else if (index == 10)
+            // {
+            //     if (!hasSelectedBuySportswear)
+            //         return;
+            // }
+            // else if (index == 11)
+            // {
+            //     if (!hasSelectedSportswearDesign)
+            //         return;
+            // }
+            // else if (index == 12)
+            // {
+            //     // Page 12: Decision influence (Checkboxes)
+            //     if (!hasSelectedInfluence)
+            //         return;
+            // }
+            // else if (index == 13)
+            // {
+            //     if (!hasRatedAllMaterials)
+            //         return;
+            // }
+            // else if (index == 14)
+            // {
+            //     // Page 14: Brand Personality (Checkboxes)
+            //     if (!hasSelectedBrandPersonality)
+            //         return;
+            // }
+            // else if (index == 15)
+            // {
+            //     // Page 15: Other Interests (Checkboxes)
+            //     if (!hasSelectedInterests)
+            //         return;
+            // }
 
             Point currentPos = formImg!.Location;
             if (formImg.Right == 1920)

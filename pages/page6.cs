@@ -28,6 +28,8 @@ public partial class Window : Form
         likertPage6.Height = 100;
         likertPage6.ActiveImage = Image.FromFile("assets\\radioActive.png");
         likertPage6.InactiveImage = Image.FromFile("assets\\radioInactive.png");
+        likertPage6.MinLabel = "Not At All Often";
+        likertPage6.MaxLabel = "Extremely Often";
 
         likertPage6.MaxRange = 10;
 
