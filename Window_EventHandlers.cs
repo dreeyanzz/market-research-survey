@@ -107,6 +107,8 @@ public partial class Window : Form
     private void InitNavigationButtons()
     {
         Image prevButtonImage = Image.FromFile("assets\\buttonprevious.png");
+        Image nextButtonImage = Image.FromFile("assets\\buttonnext.png");
+
         prevButton = new()
         {
             NormalImage = prevButtonImage,
@@ -118,7 +120,20 @@ public partial class Window : Form
             Point currentPos = formImg!.Location;
 
             if (formImg.Left == 0)
+            {
+                AnimateControl(header!, new Point(440, 435), 500);
+                AnimateControl(titleBarImg!, new Point(0, -_titleBarImage.Height), 500);
+
+                AnimateControl(getStartedButton!, new Point(861, 877), 500);
+
+                AnimateControl(formImg, new Point(currentPos.X + 1920, currentPos.Y), 500);
+
+                AnimateControl(prevButton, new Point(-prevButtonImage.Width, 877), 500);
+                AnimateControl(nextButton!, new Point(1920, 877), 500);
+
+                index--;
                 return;
+            }
 
             int stopPosX = index * 1920;
             if (formImg.Left != -stopPosX)
@@ -128,7 +143,6 @@ public partial class Window : Form
             AnimateControl(formImg, new Point(currentPos.X + 1920, currentPos.Y), 500);
         };
 
-        Image nextButtonImage = Image.FromFile("assets\\buttonnext.png");
         nextButton = new()
         {
             NormalImage = nextButtonImage,

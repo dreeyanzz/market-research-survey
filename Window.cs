@@ -13,6 +13,7 @@ public partial class Window : Form
     private PictureBox? formImg;
     private Size maximizedSize;
     private int index = -1;
+    private readonly Image _titleBarImage;
 
     public Window()
     {
@@ -24,7 +25,7 @@ public partial class Window : Form
 
         InitHeader();
 
-        Image _titleBarImage = Image.FromFile("assets\\TitleBar.png");
+        _titleBarImage = Image.FromFile("assets\\TitleBar.png");
         titleBarImg = new()
         {
             Image = _titleBarImage,
