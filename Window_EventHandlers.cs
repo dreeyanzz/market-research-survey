@@ -137,91 +137,22 @@ public partial class Window : Form
         };
         nextButton.Click += (sender, e) =>
         {
-            // if (index == 0)
-            // {
-            //     if (!hasSelectedGender)
-            //         return;
-            // }
-            // else if (index == 1)
-            // {
-            //     if (!hasSelectedAgeRange)
-            //         return;
-            // }
-            // else if (index == 2)
-            // {
-            //     if (!hasSelectedMaritalStatus)
-            //         return;
-            // }
-            // else if (index == 3)
-            // {
-            //     if (!hasSelectedAnnualIncomeRange)
-            //         return;
-            // }
-            // else if (index == 4)
-            // {
-            //     if (!hasSelectedEmploymentStatus)
-            //         return;
-            // }
-            // else if (index == 5)
-            // {
-            //     if (!hasSelectedEducation)
-            //         return;
-            // }
-            // else if (index == 6)
-            // {
-            //     if (!hasSelectedExercise)
-            //         return;
-            // }
-            // else if (index == 7)
-            // {
-            //     if (!hasSelectedSportswear)
-            //         return;
-            // }
-            // else if (index == 8)
-            // {
-            //     if (!hasSelectedLastBuySportswear)
-            //         return;
-            // }
-            // else if (index == 9)
-            // {
-            //     if (!hasSelectedSportswearPurpose)
-            //         return;
-            // }
-            // else if (index == 10)
-            // {
-            //     if (!hasSelectedBuySportswear)
-            //         return;
-            // }
-            // else if (index == 11)
-            // {
-            //     if (!hasSelectedSportswearDesign)
-            //         return;
-            // }
-            // else if (index == 12)
-            // {
-            //     // Page 12: Decision influence (Checkboxes)
-            //     if (!hasSelectedInfluence)
-            //         return;
-            // }
-            // else if (index == 13)
-            // {
-            //     if (!hasRatedAllMaterials)
-            //         return;
-            // }
-            // else if (index == 14)
-            // {
-            //     // Page 14: Brand Personality (Checkboxes)
-            //     if (!hasSelectedBrandPersonality)
-            //         return;
-            // }
-            // else if (index == 15)
-            // {
-            //     // Page 15: Other Interests (Checkboxes)
-            //     if (!hasSelectedInterests)
-            //         return;
-            // }
+            // 1. Validation Logic
+            if (!IsPageValid(out string errorMessage))
+            {
+                MessageBox.Show(
+                    errorMessage,
+                    "Selection Required",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
 
+            // 2. Navigation & Animation Logic
             Point currentPos = formImg!.Location;
+
+            // Safety check to ensure we aren't at the end
             if (formImg.Right == 1920)
                 return;
 
@@ -267,6 +198,41 @@ public partial class Window : Form
         content.Controls.SetChildIndex(prevButton, 0);
         content.Controls.SetChildIndex(nextButton, 0);
         content.Controls.SetChildIndex(getStartedButton, 0);
+    }
+
+    // --- Optimization: The Validation Helper Method ---
+    private bool IsPageValid(out string error)
+    {
+        error = "Please answer the question before proceeding."; // Default message
+
+        bool isValid = index switch
+        {
+            0 => hasSelectedGender,
+            1 => hasSelectedAgeRange,
+            2 => hasSelectedMaritalStatus,
+            3 => hasSelectedAnnualIncomeRange,
+            4 => hasSelectedEmploymentStatus,
+            5 => hasSelectedEducation,
+            6 => hasSelectedExercise,
+            7 => hasSelectedSportswear,
+            8 => hasSelectedLastBuySportswear,
+            9 => hasSelectedSportswearPurpose,
+            10 => hasSelectedBuySportswear,
+            11 => hasSelectedSportswearDesign,
+            12 => hasSelectedInfluence,
+            13 => hasRatedAllMaterials,
+            14 => hasSelectedBrandPersonality,
+            15 => hasSelectedInterests,
+            _ => true, // Pages with no requirements
+        };
+
+        // Optional: Customize messages for specific pages if desired
+        if (!isValid && index == 13)
+            error = "Please provide a rating for ALL material categories.";
+        if (!isValid && index == 15)
+            error = "Please select at least one interest.";
+
+        return isValid;
     }
 
     private void InitForm()

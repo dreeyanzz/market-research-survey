@@ -3,15 +3,12 @@ namespace market_research_survey;
 public partial class Window : Form
 {
     private RatingGroup? ratingPage13;
-
-    // Track if all categories have been rated (optional validation)
     private bool hasRatedAllMaterials = false;
 
     private void InitPage13()
     {
         ratingPage13 = new();
 
-        // Page 13 starts at 13 * 1920
         int normalizedPos = 13 * 1920;
 
         Label question = new()
@@ -19,44 +16,41 @@ public partial class Window : Form
             Text = "Please rate your preferences regarding the materials used in sportswear",
             Font = new("Inter", 40f, FontStyle.Bold, GraphicsUnit.Pixel),
             ForeColor = Color.Black,
-            Location = new Point(normalizedPos + 205, 83),
+            Location = new Point(normalizedPos + 205, 70), // Moved up slightly from 83
             TextAlign = ContentAlignment.MiddleCenter,
             AutoSize = true,
         };
 
         formImg!.Controls.Add(question);
 
-        // 1. Configure the Star Visuals
-        ratingPage13.ActiveImage = Image.FromFile("assets\\radioActive.png"); // Your active star PNG
-        ratingPage13.InactiveImage = Image.FromFile("assets\\radioInactive.png"); // Your inactive star PNG
-
-        ratingPage13.StarSize = new Size(48, 48); // Scaled size for the stars
+        // 1. Configure Visuals
+        ratingPage13.ActiveImage = Image.FromFile("assets\\radioActive.png");
+        ratingPage13.InactiveImage = Image.FromFile("assets\\radioInactive.png");
+        ratingPage13.StarSize = new Size(48, 48);
         ratingPage13.StarSpacing = 12;
         ratingPage13.MaxStars = 5;
         ratingPage13.Font = new Font("Inter", 32f, FontStyle.Regular, GraphicsUnit.Pixel);
 
         // 2. Set Control Bounds
-        // Spaced similarly to Page 12
-        ratingPage13.Location = new Point(normalizedPos + 406, 220);
-        ratingPage13.Size = new Size(1400, 700);
+        // Moved Y up to 200 (from 220) to give more room at the bottom
+        ratingPage13.Location = new Point(normalizedPos + 406, 200);
+        ratingPage13.Size = new Size(1400, 650);
 
-        // --- Update these points in InitPage13 ---
+        // 3. Optimized Points (Tightened to 130px increments)
         // Column 1
         ratingPage13.AddCategory("Water Resistance", new Point(0, 0));
-        ratingPage13.AddCategory("Anti Bacteria", new Point(0, 150));
-        ratingPage13.AddCategory("Soft and Smooth Material", new Point(0, 300));
-        ratingPage13.AddCategory("Cooling", new Point(0, 450));
+        ratingPage13.AddCategory("Anti Bacteria", new Point(0, 110));
+        ratingPage13.AddCategory("Soft and Smooth Material", new Point(0, 220));
+        ratingPage13.AddCategory("Cooling", new Point(0, 330));
 
         // Column 2
         ratingPage13.AddCategory("Anti Odour", new Point(708, 0));
-        ratingPage13.AddCategory("Elasticity", new Point(708, 150));
-        ratingPage13.AddCategory("Endurance", new Point(708, 300));
+        ratingPage13.AddCategory("Elasticity", new Point(708, 110));
+        ratingPage13.AddCategory("Endurance", new Point(708, 220));
 
-        // 5. Listen for Rating Changes
-        // Inside InitPage13
+        // 4. Validation logic
         ratingPage13.RatingChanged += (sender, e) =>
         {
-            // This checks if EVERY category has a star selected
             hasRatedAllMaterials = ratingPage13.IsEverythingRated;
         };
 
