@@ -79,5 +79,6 @@ public partial class Window : Form
         InitPage13();
         InitPage14();
         InitPage15();
+        InitPage16(); // Summary page
     }
 }

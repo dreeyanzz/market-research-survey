@@ -118,6 +118,10 @@ public class RatingGroup : Control
     [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool IsEverythingRated =>
         _categories.Count > 0 && _categories.All(cat => cat.CurrentRating > 0);
+
+    // Public property to access categories for summary page
+    [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public List<RatingCategory> Categories => _categories;
     #endregion
 
     public void AddCategory(string label, Point position, object? tag = null) =>

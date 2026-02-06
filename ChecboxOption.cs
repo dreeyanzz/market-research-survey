@@ -122,6 +122,10 @@ public class CustomCheckboxGroup : Control
     [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public List<object?> SelectedValues => _selectedIndices.Select(i => _options[i].Value).ToList();
 
+    // Public property to access options for summary page
+    [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public List<CheckboxOption> Options => _options;
+
     #endregion
 
     #region Public Methods

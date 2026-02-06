@@ -140,6 +140,13 @@ public partial class Window : Form
                 return;
 
             index--;
+            
+            // Show Next button again if coming back from page 16
+            if (index < 16 && nextButton != null)
+            {
+                nextButton.Visible = true;
+            }
+            
             AnimateControl(formImg, new Point(currentPos.X + 1920, currentPos.Y), 500);
         };
 
@@ -151,7 +158,7 @@ public partial class Window : Form
         };
         nextButton.Click += (sender, e) =>
         {
-            // 1. Validation Logic
+            // 1. Validation Logic (only for pages that need it)
             if (!IsPageValid(out string errorMessage))
             {
                 MessageBox.Show(
@@ -166,8 +173,8 @@ public partial class Window : Form
             // 2. Navigation & Animation Logic
             Point currentPos = formImg!.Location;
 
-            // Safety check to ensure we aren't at the end
-            if (formImg.Right == 1920)
+            // Safety check: Don't navigate beyond page 16 (the summary page)
+            if (index >= 16)
                 return;
 
             int stopPosX = index * 1920;
@@ -175,6 +182,14 @@ public partial class Window : Form
                 return;
 
             index++;
+            
+            // Special handling: Populate summary and hide Next button when navigating to page 16
+            if (index == 16)
+            {
+                PopulateSummaryPanel();
+                nextButton.Visible = false; // Hide Next button on summary page
+            }
+            
             AnimateControl(formImg, new Point(currentPos.X - 1920, currentPos.Y), 500);
         };
 
@@ -237,7 +252,7 @@ public partial class Window : Form
             13 => hasRatedAllMaterials,
             14 => hasSelectedBrandPersonality,
             15 => hasSelectedInterests,
-            _ => true, // Pages with no requirements
+            _ => true, // Pages with no requirements (including page 16 - summary)
         };
 
         // Optional: Customize messages for specific pages if desired
