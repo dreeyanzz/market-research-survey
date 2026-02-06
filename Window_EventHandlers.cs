@@ -167,6 +167,21 @@ public partial class Window : Form
                 if (!hasSelectedEducation)
                     return;
             }
+            else if (index == 6)
+            {
+                if (!hasSelectedExercise)
+                    return;
+            }
+            else if (index == 7)
+            {
+                if (!hasSelectedSportswear)
+                    return;
+            }
+            else if (index == 8)
+            {
+                if (!hasSelectedLastBuySportswear)
+                    return;
+            }
 
             Point currentPos = formImg!.Location;
             if (formImg.Right == 1920)

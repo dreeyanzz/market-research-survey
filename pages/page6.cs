@@ -3,6 +3,7 @@ namespace market_research_survey;
 public partial class Window : Form
 {
     private LikertScale? likertPage6;
+    private bool hasSelectedExercise = false;
 
     private void InitPage6()
     {
@@ -29,6 +30,8 @@ public partial class Window : Form
         likertPage6.InactiveImage = Image.FromFile("assets\\radioInactive.png");
 
         likertPage6.MaxRange = 10;
+
+        likertPage6.SelectedIndexChanged += (sender, e) => hasSelectedExercise = true;
 
         formImg.Controls.Add(likertPage6);
     }
