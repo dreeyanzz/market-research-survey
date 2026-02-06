@@ -2,11 +2,13 @@ namespace market_research_survey;
 
 public partial class Window : Form
 {
-    private readonly CustomRadioGroup radioPage0;
+    private CustomRadioGroup? radioPage0;
     private bool hasSelectedGender = false;
 
     private void InitPage0()
     {
+        radioPage0 = new();
+
         int normalizedPos = 0 * 1920;
 
         Label question = new()

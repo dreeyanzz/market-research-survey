@@ -157,6 +157,16 @@ public partial class Window : Form
                 if (!hasSelectedAnnualIncomeRange)
                     return;
             }
+            else if (index == 4)
+            {
+                if (!hasSelectedEmploymentStatus)
+                    return;
+            }
+            else if (index == 5)
+            {
+                if (!hasSelectedEducation)
+                    return;
+            }
 
             Point currentPos = formImg!.Location;
             if (formImg.Right == 1920)

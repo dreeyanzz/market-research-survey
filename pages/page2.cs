@@ -2,11 +2,13 @@ namespace market_research_survey;
 
 public partial class Window : Form
 {
-    private readonly CustomRadioGroup? radioPage2;
+    private CustomRadioGroup? radioPage2;
     private bool hasSelectedMaritalStatus = false;
 
     private void InitPage2()
     {
+        radioPage2 = new();
+
         int normalizedPos = 2 * 1920;
 
         Label question = new()

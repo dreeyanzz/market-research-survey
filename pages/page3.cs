@@ -2,11 +2,13 @@ namespace market_research_survey;
 
 public partial class Window : Form
 {
-    private readonly CustomRadioGroup? radioPage3;
+    private CustomRadioGroup? radioPage3;
     private bool hasSelectedAnnualIncomeRange = false;
 
     private void InitPage3()
     {
+        radioPage3 = new();
+
         int normalizedPos = 3 * 1920;
 
         Label question = new()
@@ -34,6 +36,7 @@ public partial class Window : Form
         radioPage3.AddOption("25,000-$49,999", new Point(0, 100));
         radioPage3.AddOption("$75,000-$99,999", new Point(0, 200));
         radioPage3.AddOption("Prefer Not to Answer", new Point(0, 300));
+
         radioPage3.AddOption("$10,000-$24,999", new Point(708, 0));
         radioPage3.AddOption("$50,000-$74,999", new Point(708, 100));
         radioPage3.AddOption("$100,000 or more", new Point(708, 200));
