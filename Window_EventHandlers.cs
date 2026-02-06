@@ -142,7 +142,21 @@ public partial class Window : Form
                 if (!hasSelectedGender)
                     return;
             }
-            else if (index == 2) { }
+            else if (index == 1)
+            {
+                if (!hasSelectedAgeRange)
+                    return;
+            }
+            else if (index == 2)
+            {
+                if (!hasSelectedMaritalStatus)
+                    return;
+            }
+            else if (index == 3)
+            {
+                if (!hasSelectedAnnualIncomeRange)
+                    return;
+            }
 
             Point currentPos = formImg!.Location;
             if (formImg.Right == 1920)

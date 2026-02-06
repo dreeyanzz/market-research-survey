@@ -63,6 +63,12 @@ public partial class Window : Form
         SizeChanged += Window_OnResize;
 
         radioPage0 = new CustomRadioGroup();
+        radioPage1 = new CustomRadioGroup();
+        radioPage2 = new CustomRadioGroup();
+        radioPage3 = new CustomRadioGroup();
         InitPage0();
+        InitPage1();
+        InitPage2();
+        InitPage3();
     }
 }

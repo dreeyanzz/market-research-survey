@@ -21,17 +21,18 @@ public partial class Window : Form
 
         formImg!.Controls.Add(question);
 
-        radioPage0.ImageTextSpacing = 10;
+        radioPage0.ImageTextSpacing = 31;
         radioPage0.CustomFont = new Font("Inter", 56f, FontStyle.Regular, GraphicsUnit.Pixel);
 
         radioPage0.ActiveImage = Image.FromFile("assets\\radioActive.png");
         radioPage0.InactiveImage = Image.FromFile("assets\\radioInactive.png");
 
         radioPage0.Location = new Point(normalizedPos + 370, 246);
-        radioPage0.Size = new Size(1540, 300);
+        radioPage0.Size = new Size(1400, 300);
 
         radioPage0.AddOption("Female", new Point(0, 0));
         radioPage0.AddOption("Male", new Point(0, 158));
+
         radioPage0.AddOption("Non-binary", new Point(708, 0));
         radioPage0.AddOption("Prefer not to say", new Point(708, 158));
 

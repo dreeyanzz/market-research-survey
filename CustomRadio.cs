@@ -206,39 +206,48 @@ public class CustomRadioGroup : Control
     )
     {
         Image? img = isSelected ? _activeImage : _inactiveImage;
-        int indicatorSize = 16; // Default size if no image
+        int indicatorW = img?.Width ?? 16;
+        int indicatorH = img?.Height ?? 16;
 
-        int currentX = option.Position.X;
-        int currentY = option.Position.Y;
+        SizeF textSize = g.MeasureString(option.Label, _customFont);
 
-        // 1. Draw Indicator (Image or Vector fallback)
+        // Calculate total row height to find the center
+        float rowHeight = Math.Max(indicatorH, textSize.Height);
+
+        // Center both the indicator and the text within that row height
+        float indicatorY = option.Position.Y + (rowHeight - indicatorH) / 2f;
+        float textY = option.Position.Y + (rowHeight - textSize.Height) / 2f;
+        float currentX = option.Position.X;
+
+        // 1. Draw Indicator
         if (img != null)
         {
-            g.DrawImage(img, currentX, currentY, img.Width, img.Height);
-            currentX += img.Width + _imageTextSpacing;
+            g.DrawImage(img, currentX, indicatorY, indicatorW, indicatorH);
         }
         else
         {
-            // Draw a standard-looking radio button if images are missing
-            Rectangle rect = new Rectangle(currentX, currentY, indicatorSize, indicatorSize);
+            RectangleF rect = new RectangleF(currentX, indicatorY, indicatorW, indicatorH);
             using (Pen p = new Pen(this.ForeColor, 2))
                 g.DrawEllipse(p, rect);
             if (isSelected)
             {
-                Rectangle inner = rect;
+                RectangleF inner = rect;
                 inner.Inflate(-4, -4);
                 using (Brush b = new SolidBrush(this.ForeColor))
                     g.FillEllipse(b, inner);
             }
-            currentX += indicatorSize + _imageTextSpacing;
         }
 
         // 2. Draw Label
         using (Brush brush = new SolidBrush(this.ForeColor))
         {
-            SizeF textSize = g.MeasureString(option.Label, _customFont);
-            float textY = currentY + (img?.Height ?? indicatorSize) / 2f - textSize.Height / 2f;
-            g.DrawString(option.Label, _customFont, brush, currentX, textY);
+            g.DrawString(
+                option.Label,
+                _customFont,
+                brush,
+                currentX + indicatorW + _imageTextSpacing,
+                textY
+            );
         }
 
         // 3. Draw Hover State
@@ -263,7 +272,7 @@ public class CustomRadioGroup : Control
         {
             SizeF textSize = g.MeasureString(option.Label, _customFont);
             int width = indicatorW + _imageTextSpacing + (int)textSize.Width + 4;
-            int height = Math.Max(indicatorH, (int)textSize.Height) + 4;
+            int height = (int)Math.Max(indicatorH, textSize.Height) + 4;
             return new Rectangle(option.Position.X - 2, option.Position.Y - 2, width, height);
         }
     }
