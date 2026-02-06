@@ -140,13 +140,13 @@ public partial class Window : Form
                 return;
 
             index--;
-            
+
             // Show Next button again if coming back from page 16
             if (index < 16 && nextButton != null)
             {
                 nextButton.Visible = true;
             }
-            
+
             AnimateControl(formImg, new Point(currentPos.X + 1920, currentPos.Y), 500);
         };
 
@@ -182,14 +182,14 @@ public partial class Window : Form
                 return;
 
             index++;
-            
+
             // Special handling: Populate summary and hide Next button when navigating to page 16
             if (index == 16)
             {
                 PopulateSummaryPanel();
                 nextButton.Visible = false; // Hide Next button on summary page
             }
-            
+
             AnimateControl(formImg, new Point(currentPos.X - 1920, currentPos.Y), 500);
         };
 

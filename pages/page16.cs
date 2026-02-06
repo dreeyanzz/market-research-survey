@@ -338,7 +338,7 @@ public partial class Window : Form
             {
                 nextButton.Visible = true;
             }
-            
+
             // Go back to page 0 so user can edit their answers
             Point currentPos = formImg!.Location;
             AnimateControl(formImg, new Point(currentPos.X + (index * 1920), currentPos.Y), 500);
