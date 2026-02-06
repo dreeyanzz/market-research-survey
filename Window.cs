@@ -71,5 +71,8 @@ public partial class Window : Form
         InitPage6();
         InitPage7();
         InitPage8();
+        InitPage9();
+        InitPage10();
+        InitPage11();
     }
 }
